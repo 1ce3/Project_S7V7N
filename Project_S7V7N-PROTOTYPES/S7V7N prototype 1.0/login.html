@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S7V7N - Log In</title>
+    
+    <!-- 1. Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load Google Font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. Configure Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            '800': '#1f2937',
+                            '900': '#111827',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- 4. Link our external CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+
+    <!-- === HEADER / NAVIGATION === -->
+    <header class="bg-gray-900 sticky top-0 z-40 border-b border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+            <!-- Logo -->
+            <a href="index.html" class="text-3xl font-bold tracking-tight text-white">
+                S7V7N
+            </a>
+            
+            <!-- Main Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="category.html?category=All" class="text-gray-300 hover:text-white transition-colors">Products</a>
+                <a href="category.html?category=PC Case" class="text-gray-300 hover:text-white transition-colors">PC Cases</a>
+                <a href="category.html?category=Keyboard" class="text-gray-300 hover:text-white transition-colors">Keyboards</a>
+                <a href="category.html?category=Mice" class="text-gray-300 hover:text-white transition-colors">Mice</a>
+            </div>
+            
+            <!-- Right Icons -->
+            <div class="flex items-center space-x-4">
+                <a href="login.html" id="login-link" class="text-gray-300 hover:text-white transition-colors">Log In</a>
+                <a href="admin.html" id="admin-link" class="text-sm text-gray-400 hover:text-indigo-400 transition-colors" style="display: none;">Admin</a>
+                <button id="logout-button" onclick="handleLogout()" class="text-gray-300 hover:text-white transition-colors" style="display: none;">Log Out</button>
+                
+                <!-- Compare Button -->
+                <a href="compare.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span id="compare-count-badge" class="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+                
+                <!-- Cart Button -->
+                <a href="cart.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- === MAIN CONTENT WRAPPER === -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- === PAGE: LOGIN === -->
+        <div id="page-login">
+            <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                <h1 class="text-3xl font-bold tracking-tight text-center mb-6">Log In</h1>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="login-email" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="admin@s7v7n.com">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-300">Password</label>
+                        <input type="password" id="login-password" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="admin">
+                        <p class="text-xs text-gray-500 mt-1">Hint: Use `admin@s7v7n.com` and any password for admin access.</p>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        Log In
+                    </button>
+                    <p class="text-sm text-center text-gray-400">
+                        Don't have an account? 
+                        <a href="register.html" class="font-medium text-indigo-400 hover:text-indigo-300">Register here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- === FOOTER === -->
+    <footer class="bg-gray-900 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-lg font-semibold text-white">
+                    <a href="policy.html" class="hover:text-indigo-400">POLICY</a>
+                </h3>
+                <ul class="space-y-1 mt-2">
+                    <li><a href="warranty.html" class="text-gray-400 hover:text-white">Warranty Policy</a></li>
+                    <li><a href="delivery.html" class="text-gray-400 hover:text-white">Delivery Policy</a></li>
+                    <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="text-gray-400">
+                <p>&copy; 2025 S7V7N. All rights reserved.</p>
+                <p>Custom Coded Edition</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- === TOAST NOTIFICATION === -->
+    <div id="toast">Item added to cart!</div>
+    
+    <!--
+      === FIREBASE SDK (V8 COMPAT) ===
+      This is the correct V8/compat SDK.
+      It MUST be loaded *before* app.js.
+    -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- NEW: Added Firebase transaction support -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+
+    <!--
+      === OUR APPLICATION LOGIC ===
+      This is our app.js, loaded as a regular script.
+      It will find the `firebase` object created by the scripts above.
+    -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

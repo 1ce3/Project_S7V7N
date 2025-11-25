@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S7V7N - Admin Panel</title>
+    
+    <!-- 1. Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load Google Font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. Configure Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            '800': '#1f2937',
+                            '900': '#111827',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- 4. Link our external CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+
+    <!-- === HEADER / NAVIGATION === -->
+    <header class="bg-gray-900 sticky top-0 z-40 border-b border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+            <!-- Logo -->
+            <a href="index.html" class="text-3xl font-bold tracking-tight text-white">
+                S7V7N
+            </a>
+            
+            <!-- Main Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="category.html?category=All" class="text-gray-300 hover:text-white transition-colors">Products</a>
+                <a href="category.html?category=PC Case" class="text-gray-300 hover:text-white transition-colors">PC Cases</a>
+                <a href="category.html?category=Keyboard" class="text-gray-300 hover:text-white transition-colors">Keyboards</a>
+                <a href="category.html?category=Mice" class="text-gray-300 hover:text-white transition-colors">Mice</a>
+            </div>
+            
+            <!-- Right Icons -->
+            <div class="flex items-center space-x-4">
+                <a href="login.html" id="login-link" class="text-gray-300 hover:text-white transition-colors">Log In</a>
+                <a href="admin.html" id="admin-link" class="text-sm text-gray-400 hover:text-indigo-400 transition-colors" style="display: none;">Admin</a>
+                <button id="logout-button" onclick="handleLogout()" class="text-gray-300 hover:text-white transition-colors" style="display: none;">Log Out</button>
+                
+                <!-- Compare Button -->
+                <a href="compare.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span id="compare-count-badge" class="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+                
+                <!-- Cart Button -->
+                <a href="cart.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- === PAGE: ADMIN CONTROL PANEL === -->
+        <div id="page-admin" class="page">
+            <h1 class="text-4xl font-bold tracking-tight mb-4">Admin Control Panel</h1>
+            <p class="mb-6 text-gray-300">Your product database currently has <strong id="admin-product-count" class="text-white">0</strong> items.</p>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Add/Edit Product Form -->
+                <div class="lg:w-1/3 bg-gray-800 p-6 rounded-lg shadow-lg h-fit sticky top-28">
+                    <h2 class="text-2xl font-semibold mb-4" id="admin-form-title">Add New Product</h2>
+                    <form id="admin-product-form">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="admin-product-name" class="block text-sm font-medium text-gray-300">Product Name</label>
+                                <input type="text" id="admin-product-name" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="admin-product-price" class="block text-sm font-medium text-gray-300">Price (VND)</label>
+                                    <input type="number" id="admin-product-price" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <!-- NEW: Stock Quantity Field -->
+                                <div>
+                                    <label for="admin-product-stock" class="block text-sm font-medium text-gray-300">Stock Quantity</label>
+                                    <input type="number" id="admin-product-stock" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="0" min="0">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="admin-product-category" class="block text-sm font-medium text-gray-300">Category</label>
+                                <select id="admin-product-category" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>PC Case</option>
+                                    <option>Keyboard</option>
+                                    <option>Mice</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="admin-product-image" class="block text-sm font-medium text-gray-300">Image URL</label>
+                                <input type="text" id="admin-product-image" placeholder="https://placehold.co/..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <label for="admin-product-description" class="block text-sm font-medium text-gray-300">Description</label>
+                                    <button type="button" id="generate-desc-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">✨ Generate</button>
+                                </div>
+                                <textarea id="admin-product-description" rows="3" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                            </div>
+                            <!-- === Product Specs Fields === -->
+                            <div class="border-t border-gray-700 pt-4">
+                                <h3 class="text-lg font-semibold mb-2">PC Specifications & Benchmarking</h3>
+                                <p class="text-xs text-gray-400 mb-4">Enter component names and assign a "Power Level" (1 = Basic, 5 = Ultimate) for the benchmark tool.</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">CPU</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-cpu" placeholder="e.g. Intel Core i5" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-cpu" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">GPU</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-gpu" placeholder="e.g. RTX 3060" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-gpu" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">RAM</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-ram" placeholder="e.g. 16GB DDR4" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-ram" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Storage</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-storage" placeholder="e.g. 1TB SSD" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-storage" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Mainboard</label>
+                                        <input type="text" id="admin-spec-mainboard" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">PSU</label>
+                                        <input type="text" id="admin-spec-psu" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Cooler</label>
+                                        <input type="text" id="admin-spec-cooler" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Case</label>
+                                        <input type="text" id="admin-spec-case" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Save Product</button>
+                                <button type="button" onclick="resetAdminForm()" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Product List -->
+                <div class="lg:w-2/3">
+                    <h2 class="text-2xl font-semibold mb-4">Manage Products</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Category</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Price</th>
+                                    <!-- NEW: Stock Column -->
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Stock</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-product-list" class="divide-y divide-gray-700">
+                                <!-- Admin product list will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Management Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-semibold mb-4">Manage Customers</h2>
+                <div class="overflow-x-auto bg-gray-800 rounded-lg shadow">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-customer-list" class="divide-y divide-gray-700">
+                            <!-- Customer list will be injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Order Management Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-semibold mb-4">Manage Orders</h2>
+                <div class="overflow-x-auto bg-gray-800 rounded-lg shadow">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Order ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Customer</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Total</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-order-list" class="divide-y divide-gray-700">
+                            <!-- Order list will be injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- === FOOTER === -->
+    <footer class="bg-gray-900 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-lg font-semibold text-white">
+                    <a href="policy.html" class="hover:text-indigo-400">POLICY</a>
+                </h3>
+                <ul class="space-y-1 mt-2">
+                    <li><a href="warranty.html" class="text-gray-400 hover:text-white">Warranty Policy</a></li>
+                    <li><a href="delivery.html" class="text-gray-400 hover:text-white">Delivery Policy</a></li>
+                    <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="text-gray-400">
+                <p>&copy; 2025 S7V7N. All rights reserved.</p>
+                <p>Custom Coded Edition</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- === TOAST NOTIFICATION === -->
+    <div id="toast">Item added to cart!</div>
+    
+    <!--
+      === FIREBASE SDK (V8 COMPAT) ===
+      This is the correct V8/compat SDK.
+      It MUST be loaded *before* app.js.
+    -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- NEW: Added Firebase transaction support -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+
+    <!--
+      === OUR APPLICATION LOGIC ===
+      This is our app.js, loaded as a regular script.
+      It will find the `firebase` object created by the scripts above.
+    -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

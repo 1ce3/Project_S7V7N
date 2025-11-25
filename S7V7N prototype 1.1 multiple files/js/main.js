@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- End Global Assignments ---
     // --- Common Setup for All Pages ---
     // Load product data and update the navigation bar on every page.
+    
     Auth.checkAuthState(); // Check for a logged-in user first!
     await loadProductsFromFirebase();
     Auth.updateNav();

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S7V7N - Custom Coded</title>
+    
+    <!-- 1. Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load Google Font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. Configure Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            '800': '#1f2937',
+                            '900': '#111827',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- 4. Link our external CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+
+    <!-- === HEADER / NAVIGATION === -->
+    <!-- NEW FEATURE: Added `sticky top-0 z-40` to make the header follow the scroll -->
+    <header class="bg-gray-900 sticky top-0 z-40 border-b border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+            <!-- Logo -->
+            <a href="#" onclick="showPage('page-home'); return false;" class="text-3xl font-bold tracking-tight text-white">
+                S7V7N
+            </a>
+            
+            <!-- Main Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" onclick="showPage('page-category', 'All'); return false;" class="text-gray-300 hover:text-white transition-colors">Products</a>
+                <a href="#" onclick="showPage('page-category', 'PC Case'); return false;" class="text-gray-300 hover:text-white transition-colors">PC Cases</a>
+                <a href="#" onclick="showPage('page-category', 'Keyboard'); return false;" class="text-gray-300 hover:text-white transition-colors">Keyboards</a>
+                <a href="#" onclick="showPage('page-category', 'Mice'); return false;" class="text-gray-300 hover:text-white transition-colors">Mice</a>
+            </div>
+            
+            <!-- Right Icons -->
+            <div class="flex items-center space-x-4">
+                <a href="#" id="login-link" onclick="showPage('page-login'); return false;" class="text-gray-300 hover:text-white transition-colors">Log In</a>
+                <a href="#" id="admin-link" onclick="showPage('page-admin'); return false;" class="text-sm text-gray-400 hover:text-indigo-400 transition-colors" style="display: none;">Admin</a>
+                <button id="logout-button" onclick="handleLogout()" class="text-gray-300 hover:text-white transition-colors" style="display: none;">Log Out</button>
+                
+                <!-- Compare Button -->
+                <button onclick="showPage('page-compare');" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span id="compare-count-badge" class="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                
+                <!-- Cart Button -->
+                <button onclick="showPage('page-cart');" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- === MAIN CONTENT WRAPPER === -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- === PAGE: HOME === -->
+        <div id="page-home" class="page page-active">
+            <!-- Hero Section -->
+            <section class="text-center mb-20">
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tighter mb-4">S7V7N</h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+                    We deliver the best quality gaming equipment for gamers, creators, and professionals.
+                </p>
+            </section>
+            
+            <!-- === PAGE: HOME (Gemini Feature) === -->
+            <section class="mb-20 bg-gray-800 rounded-lg p-8 shadow-xl">
+                <h2 class="text-3xl font-bold tracking-tight text-center mb-4">✨ Need Help Choosing?</h2>
+                <p class="text-center text-gray-300 mb-6 max-w-2xl mx-auto">Describe what you do, and our AI build assistant will recommend the perfect setup from our inventory.</p>
+                <div class="flex max-w-xl mx-auto">
+                    <input type="text" id="ai-helper-prompt" class="w-full bg-gray-900 border border-gray-700 rounded-l-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g., 'I play fast FPS games and stream on Twitch'">
+                    <button id="ai-helper-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-5 rounded-r-lg transition-colors flex-shrink-0">Get Recs</button>
+                </div>
+                <div id="ai-helper-results" class="mt-6 text-gray-300 bg-gray-900 p-6 rounded-lg" style="display: none; white-space: pre-wrap; line-height: 1.75;">
+                    <!-- AI results will be injected here -->
+                </div>
+            </section>
+            
+            <!-- Featured: PC Cases -->
+            <section class="mb-16">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <!-- Text Content -->
+                    <div class="md:w-1/3 text-center md:text-left">
+                        <h3 class="text-sm text-indigo-400 font-semibold uppercase tracking-wider">Top Recommended</h3>
+                        <h2 class="text-4xl font-bold tracking-tight my-2">Pre-built PC Cases</h2>
+                        <p class="text-gray-400 mb-6">
+                            High-performance pre-built PC cases, designed for gamers and creators who want power and style right out of the box.
+                        </p>
+                        <button onclick="showPage('page-category', 'PC Case');" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                            Shop PC Cases
+                        </button>
+                    </div>
+                    <!-- Product Cards -->
+                    <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-3 gap-6" id="home-featured-cases">
+                        <!-- Featured products will be injected by JS -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Featured: Keyboards -->
+            <section class="mb-16">
+                <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                    <!-- Text Content -->
+                    <div class="md:w-1/3 text-center md:text-left">
+                        <h3 class="text-sm text-indigo-400 font-semibold uppercase tracking-wider">Top Recommended</h3>
+                        <h2 class="text-4xl font-bold tracking-tight my-2">Keyboards</h2>
+                        <p class="text-gray-400 mb-6">
+                            Mechanical keyboards that combine performance and style, giving you fast response times and customizable lighting.
+                        </p>
+                        <button onclick="showPage('page-category', 'Keyboard');" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                            Shop Keyboards
+                        </button>
+                    </div>
+                    <!-- Product Cards -->
+                    <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-3 gap-6" id="home-featured-keyboards">
+                        <!-- Featured products will be injected by JS -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Featured: Mice -->
+            <section class="mb-16">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <!-- Text Content -->
+                    <div class="md:w-1/3 text-center md:text-left">
+                        <h3 class="text-sm text-indigo-400 font-semibold uppercase tracking-wider">Top Recommended</h3>
+                        <h2 class="text-4xl font-bold tracking-tight my-2">Mice</h2>
+                        <p class="text-gray-400 mb-6">
+                            High-precision gaming mice built for comfort, speed, and accuracy. Smooth control for every click.
+                        </p>
+                        <button onclick="showPage('page-category', 'Mice');" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                            Shop Mice
+                        </button>
+                    </div>
+                    <!-- Product Cards -->
+                    <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-3 gap-6" id="home-featured-mice">
+                        <!-- Featured products will be injected by JS -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- === PAGE: CATEGORY (ALL PRODUCTS) === -->
+        <div id="page-category" class="page">
+            <div class="mb-4" id="category-breadcrumb">
+                <span class="text-gray-400">Home &gt; </span>
+                <span class="text-white">All Products</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-8" id="category-title">All Products</h1>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Filters Sidebar -->
+                <aside class="md:w-1/4">
+                    <h2 class="text-2xl font-semibold mb-4">Filter by</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-semibold">Max Price</h3>
+                                <span id="price-value" class="text-xs text-indigo-400 font-mono">70.000.000 ₫</span>
+                        </div>
+                        <input type="range" id="price-filter" 
+                                min="5000000" max="70000000" step="500000" value="70000000" 
+                                class="w-full cursor-pointer accent-indigo-600">
+                        </div>
+                        <div>
+                            <h3 class="font-semibold mb-2">Category</h3>
+                            <ul class="space-y-1">
+                                <li><a href="#" onclick="showPage('page-category', 'All'); return false;" class="text-gray-300 hover:text-white">All Products</a></li>
+                                <li><a href="#" onclick="showPage('page-category', 'PC Case'); return false;" class="text-gray-300 hover:text-white">PC Cases</a></li>
+                                <li><a href="#" onclick="showPage('page-category', 'Keyboard'); return false;" class="text-gray-300 hover:text-white">Keyboards</a></li>
+                                <li><a href="#" onclick="showPage('page-category', 'Mice'); return false;" class="text-gray-300 hover:text-white">Mice</a></li>
+                            </ul>
+                        </div>
+                        <!-- More filters can be added here -->
+                    </div>
+                </aside>
+                
+                <!-- Product Grid -->
+                <section class="md:w-3/4">
+                    <div id="category-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Product cards will be injected by JS -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- === PAGE: PRODUCT DETAIL === -->
+        <div id="page-product" class="page">
+            <div class="mb-4" id="product-breadcrumb">
+                <!-- Breadcrumb will be set by JS -->
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Product Image -->
+                <div>
+                    <img id="product-image" src="https://placehold.co/600x600/1f2937/ffffff?text=Product+Image" alt="Product Image" class="w-full rounded-lg shadow-lg aspect-square object-cover">
+                    <!-- Thumbnail gallery could go here -->
+                </div>
+                
+                <!-- Product Info -->
+                <div>
+                    <h1 id="product-name" class="text-4xl font-bold tracking-tight mb-2">Product Name</h1>
+                    <p id="product-price" class="text-3xl text-indigo-400 font-semibold mb-4">0 VND</p>
+                    
+                    <!-- NEW: Stock Level Indicator -->
+                    <div id="product-stock-level" class="text-lg font-medium mb-6">
+                        <!-- e.g., "10 in stock" or "Out of Stock" -->
+                    </div>
+
+                    <p id="product-description" class="text-gray-300 mb-8 leading-relaxed">
+                    Product description goes here.
+                </p>
+                
+                <!-- === Technical Specs Section === -->
+                <div id="product-specs-container" class="mb-8" style="display: none;">
+                    <h3 class="text-xl font-semibold text-white mb-4">Technical Specifications</h3>
+                    <ul id="product-specs-list" class="space-y-3 text-gray-300 bg-gray-800 p-4 rounded-lg">
+                        <!-- Specs will be injected by JS here -->
+                    </ul>
+                </div>
+                
+                <!-- Quantity & Add to Cart -->
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="flex items-center border border-gray-700 rounded-lg">
+                            <button onclick="updateQuantity('product-quantity-input', -1)" class="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-l-lg">-</button>
+                            <input id="product-quantity-input" type="number" value="1" min="1" class="w-16 text-center bg-gray-900 border-x border-gray-700 py-2 focus:outline-none">
+                            <button onclick="updateQuantity('product-quantity-input', 1)" class="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-r-lg">+</button>
+                        </div>
+                        <!-- NEW: Add to Cart button will be enabled/disabled by JS -->
+                        <button id="add-to-cart-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed">
+                            Add to Cart
+                        </button>
+                    </div>
+
+                    <!-- Compare Button -->
+                    <button id="add-to-compare-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        Add to Compare
+                    </button>
+                    
+                    <!-- Info Tabs -->
+                    <div>
+                        <div class="border-b border-gray-700">
+                            <nav class="flex space-x-6 -mb-px">
+                                <a href="#" class="py-4 px-1 border-b-2 border-indigo-500 text-indigo-400 font-medium">Product Info</a>
+                                <a href="#" onclick="showPage('page-warranty'); return false;" class="py-4 px-1 border-b-2 border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Return Policy</a>
+                                <a href="#" onclick="showPage('page-delivery'); return false;" class="py-4 px-1 border-b-2 border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500">Shipping Info</a>
+                            </nav>
+                        </div>
+                        <div class="py-6">
+                            <p class="text-gray-300">
+                                This is a great place to add more details about your product such as sizing, material, care instructions, and cleaning instructions. This is also a great space to highlight what makes this product special.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Ratings and Reviews Section -->
+                    <div class="mt-12">
+                        <h2 class="text-2xl font-semibold mb-4">Ratings & Reviews</h2>
+                        <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                            <!-- Average Rating -->
+                            <div class="flex items-center mb-4">
+                                <div id="product-avg-rating" class="flex items-center">
+                                    <!-- Stars will be injected here -->
+                                </div>
+                                <span id="product-rating-count" class="ml-2 text-sm text-gray-400">(0 ratings)</span>
+                            </div>
+
+                            <!-- Rating Form -->
+                            <div id="rating-form-container" class="mb-6" style="display: none;">
+                                <h3 class="text-lg font-semibold mb-2">Rate this product</h3>
+                                <div class="flex items-center" id="rating-stars">
+                                    <!-- Star rating input will be injected here -->
+                                </div>
+                                <button id="submit-rating-btn" class="mt-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Submit Rating</button>
+                            </div>
+                            
+                            <!-- Comment Form -->
+                            <div id="comment-form-container" class="mb-6" style="display: none;">
+                                <h3 class="text-lg font-semibold mb-2">Leave a comment</h3>
+                                <textarea id="comment-text" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="Share your thoughts..."></textarea>
+                                <button id="submit-comment-btn" class="mt-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Submit Comment</button>
+                            </div>
+
+                            <!-- Comments List -->
+                            <div id="comments-list" class="space-y-6">
+                                <!-- Comments will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- === PAGE: SHOPPING CART === -->
+        <div id="page-cart" class="page">
+            <h1 class="text-4xl font-bold tracking-tight mb-8">Your Shopping Cart</h1>
+            
+            <div id="cart-container" class="flex flex-col lg:flex-row gap-8">
+                <!-- Cart Items List -->
+                <div class="lg:w-2/3" id="cart-items-list">
+                    <!-- Cart items will be injected by JS -->
+                </div>
+                
+                <!-- Cart Summary -->
+                <div class="lg:w-1/3 bg-gray-800 p-6 rounded-lg shadow-lg h-fit sticky top-28">
+                    <h2 class="text-2xl font-semibold mb-4">Order Summary</h2>
+                    <div class="flex justify-between mb-2 text-gray-300">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">0 VND</span>
+                    </div>
+                    <div class="flex justify-between mb-4 text-gray-300">
+                        <span>Shipping</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="border-t border-gray-700 pt-4 flex justify-between items-center text-white font-bold text-xl">
+                        <span>Total</span>
+                        <span id="cart-total">0 VND</span>
+                    </div>
+                    <!-- NEW: Checkout button with logic -->
+                    <button id="checkout-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors mt-6 disabled:bg-gray-500 disabled:cursor-not-allowed">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- === PAGE: CHECKOUT === -->
+        <div id="page-checkout" class="page">
+            <h1 class="text-4xl font-bold tracking-tight mb-8">Checkout</h1>
+            <form id="checkout-form" class="space-y-8">
+                <!-- Shipping Information -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-4">Shipping Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="checkout-name" class="block text-sm font-medium text-gray-300">Full Name</label>
+                            <input type="text" id="checkout-name" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label for="checkout-phone" class="block text-sm font-medium text-gray-300">Phone Number</label>
+                            <input type="tel" id="checkout-phone" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="checkout-address" class="block text-sm font-medium text-gray-300">Address</label>
+                            <input type="text" id="checkout-address" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-4">Payment Method</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="payment-upfront" name="payment-method" value="upfront" checked class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <label for="payment-upfront" class="ml-3 block text-sm font-medium text-white">Pay Upfront</label>
+                        </div>
+                        <div id="upfront-options" class="pl-7 space-y-2">
+                            <div class="flex items-center">
+                                <input type="radio" id="payment-cash" name="upfront-type" value="cash" checked class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <label for="payment-cash" class="ml-3 block text-sm font-medium text-gray-300">Cash</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="payment-card" name="upfront-type" value="card" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <label for="payment-card" class="ml-3 block text-sm font-medium text-gray-300">Card</label>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="payment-installments" name="payment-method" value="installments" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <label for="payment-installments" class="ml-3 block text-sm font-medium text-white">Pay Over Time (with interest)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Method -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-4">Delivery Method</h2>
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <input type="radio" id="delivery-ship" name="delivery-method" value="ship" checked class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <label for="delivery-ship" class="ml-3 block text-sm font-medium text-white">Ship to Home</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="delivery-pickup" name="delivery-method" value="pickup" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                            <label for="delivery-pickup" class="ml-3 block text-sm font-medium text-white">Pick Up In Store</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors">Place Order</button>
+            </form>
+        </div>
+        
+        <!-- === PAGE: ADMIN CONTROL PANEL === -->
+        <div id="page-admin" class="page">
+            <h1 class="text-4xl font-bold tracking-tight mb-4">Admin Control Panel</h1>
+            <p class="mb-6 text-gray-300">Your product database currently has <strong id="admin-product-count" class="text-white">0</strong> items.</p>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Add/Edit Product Form -->
+                <div class="lg:w-1/3 bg-gray-800 p-6 rounded-lg shadow-lg h-fit sticky top-28">
+                    <h2 class="text-2xl font-semibold mb-4" id="admin-form-title">Add New Product</h2>
+                    <form id="admin-product-form">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="admin-product-name" class="block text-sm font-medium text-gray-300">Product Name</label>
+                                <input type="text" id="admin-product-name" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="admin-product-price" class="block text-sm font-medium text-gray-300">Price (VND)</label>
+                                    <input type="number" id="admin-product-price" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <!-- NEW: Stock Quantity Field -->
+                                <div>
+                                    <label for="admin-product-stock" class="block text-sm font-medium text-gray-300">Stock Quantity</label>
+                                    <input type="number" id="admin-product-stock" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="0" min="0">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="admin-product-category" class="block text-sm font-medium text-gray-300">Category</label>
+                                <select id="admin-product-category" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>PC Case</option>
+                                    <option>Keyboard</option>
+                                    <option>Mice</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="admin-product-image" class="block text-sm font-medium text-gray-300">Image URL</label>
+                                <input type="text" id="admin-product-image" placeholder="https://placehold.co/..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <label for="admin-product-description" class="block text-sm font-medium text-gray-300">Description</label>
+                                    <button type="button" id="generate-desc-btn" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">✨ Generate</button>
+                                </div>
+                                <textarea id="admin-product-description" rows="3" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                            </div>
+                            <!-- === Product Specs Fields === -->
+                            <div class="border-t border-gray-700 pt-4">
+                                <h3 class="text-lg font-semibold mb-2">PC Specifications & Benchmarking</h3>
+                                <p class="text-xs text-gray-400 mb-4">Enter component names and assign a "Power Level" (1 = Basic, 5 = Ultimate) for the benchmark tool.</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">CPU</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-cpu" placeholder="e.g. Intel Core i5" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-cpu" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">GPU</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-gpu" placeholder="e.g. RTX 3060" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-gpu" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">RAM</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-ram" placeholder="e.g. 16GB DDR4" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-ram" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Storage</label>
+                                        <div class="flex gap-2 mt-1">
+                                            <input type="text" id="admin-spec-storage" placeholder="e.g. 1TB SSD" class="w-2/3 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            <select id="admin-level-storage" class="w-1/3 bg-gray-900 border border-gray-700 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                                <option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option><option value="6">Lvl 6</option><option value="7">Lvl 7</option><option value="8">Lvl 8</option><option value="9">Lvl 9</option><option value="10">Lvl 10</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Mainboard</label>
+                                        <input type="text" id="admin-spec-mainboard" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">PSU</label>
+                                        <input type="text" id="admin-spec-psu" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Cooler</label>
+                                        <input type="text" id="admin-spec-cooler" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300">Case</label>
+                                        <input type="text" id="admin-spec-case" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Save Product</button>
+                                <button type="button" onclick="resetAdminForm()" class="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Product List -->
+                <div class="lg:w-2/3">
+                    <h2 class="text-2xl font-semibold mb-4">Manage Products</h2>
+                    <div class="overflow-x-auto bg-gray-800 rounded-lg shadow">
+                        <table class="min-w-full divide-y divide-gray-700">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Category</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Price</th>
+                                    <!-- NEW: Stock Column -->
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Stock</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-product-list" class="divide-y divide-gray-700">
+                                <!-- Admin product list will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Management Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-semibold mb-4">Manage Customers</h2>
+                <div class="overflow-x-auto bg-gray-800 rounded-lg shadow">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-customer-list" class="divide-y divide-gray-700">
+                            <!-- Customer list will be injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Order Management Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-semibold mb-4">Manage Orders</h2>
+                <div class="overflow-x-auto bg-gray-800 rounded-lg shadow">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Order ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Customer</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Total</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-order-list" class="divide-y divide-gray-700">
+                            <!-- Order list will be injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- === PAGE: LOGIN === -->
+        <div id="page-login" class="page">
+            <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                <h1 class="text-3xl font-bold tracking-tight text-center mb-6">Log In</h1>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="login-email" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="admin@s7v7n.com">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-300">Password</label>
+                        <input type="password" id="login-password" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="admin">
+                        <p class="text-xs text-gray-500 mt-1">Hint: Use `admin@s7v7n.com` and any password for admin access.</p>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        Log In
+                    </button>
+                    <p class="text-sm text-center text-gray-400">
+                        Don't have an account? 
+                        <a href="#" onclick="showPage('page-register'); return false;" class="font-medium text-indigo-400 hover:text-indigo-300">Register here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- === PAGE: REGISTER === -->
+        <div id="page-register" class="page">
+            <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                <h1 class="text-3xl font-bold tracking-tight text-center mb-6">Create Account</h1>
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label for="register-email" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="register-email" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="user@example.com">
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-300">Password</label>
+                        <input type="password" id="register-password" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="123456">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        Create Account
+                    </button>
+                    <p class="text-sm text-center text-gray-400">
+                        Already have an account? 
+                        <a href="#" onclick="showPage('page-login'); return false;" class="font-medium text-indigo-400 hover:text-indigo-300">Log in here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- === PAGE: COMPARE === -->
+        <div id="page-compare" class="page">
+            <h1 class="text-4xl font-bold tracking-tight mb-4">Compare Products</h1>
+            <p class="text-gray-400 mb-6">Compare the specifications of your selected builds side-by-side. You can add up to 4 items.</p>
+            <button onclick="clearCompareList()" class="bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors mb-8">
+                Clear Comparison List
+            </button>
+            
+            <div id="compare-container" class="overflow-x-auto">
+                <!-- Comparison table will be injected by JS -->
+            </div>
+            
+            <!-- Gemini Benchmark Section -->
+            <div id="compare-ai-benchmark" class="mt-12" style="display: none;">
+                <h2 class="text-3xl font-bold tracking-tight text-center mb-4">✨ AI Performance Analysis</h2>
+                <p class="text-center text-gray-300 mb-6 max-w-2xl mx-auto">Let our AI expert analyze these builds and tell you the real-world performance differences for gaming and productivity.</p>
+                <div class="flex max-w-xl mx-auto">
+                    <button id="ai-compare-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex-shrink-0">
+                        Generate AI Performance Comparison
+                    </button>
+                </div>
+                <div id="ai-compare-results" class="mt-6 text-gray-300 bg-gray-800 p-6 rounded-lg shadow-lg" style="display: none; white-space: pre-wrap; line-height: 1.75;">
+                    <!-- AI results will be injected here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- === PAGE: POLICY (NEW) === -->
+        <div id="page-policy" class="page">
+            <div class="mb-4">
+                <span class="text-gray-400">
+                    <a href="#" onclick="showPage('page-home'); return false;" class="hover:text-white">Home</a> &gt;
+                </span>
+                <span class="text-white">Policy</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-12">Policies</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Warranty Policy Card -->
+                <a href="#" onclick="showPage('page-warranty'); return false;" class="block bg-gray-800 rounded-lg shadow-lg overflow-hidden group">
+                    <img src="https://placehold.co/600x400/1f2937/ffffff?text=Warranty" alt="Hardware tools" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-semibold text-white mb-2 group-hover:text-indigo-400 transition-colors">Warranty Policy</h2>
+                        <p class="text-gray-400">View our warranty conditions and replacement policies.</p>
+                    </div>
+                </a>
+                
+                <!-- Delivery Policy Card -->
+                <a href="#" onclick="showPage('page-delivery'); return false;" class="block bg-gray-800 rounded-lg shadow-lg overflow-hidden group">
+                    <img src="https://placehold.co/600x400/1f2937/ffffff?text=Delivery" alt="Online shopping" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-semibold text-white mb-2 group-hover:text-indigo-400 transition-colors">Delivery Policy</h2>
+                        <p class="text-gray-400">Learn about our shipping times, fees, and procedures.</p>
+                    </div>
+                </a>
+                
+                <!-- Privacy Policy Card -->
+                <a href="#" onclick="showPage('page-privacy'); return false;" class="block bg-gray-800 rounded-lg shadow-lg overflow-hidden group">
+                    <img src="https://placehold.co/600x400/1f2937/ffffff?text=Privacy" alt="Padlocks" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-semibold text-white mb-2 group-hover:text-indigo-400 transition-colors">Privacy Policy</h2>
+                        <p class="text-gray-400">How we collect, use, and protect your personal data.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- === PAGE: WARRANTY POLICY (NEW) === -->
+        <div id="page-warranty" class="page">
+            <div class="mb-4">
+                <span class="text-gray-400">
+                    <a href="#" onclick="showPage('page-home'); return false;" class="hover:text-white">Home</a> &gt;
+                    <a href="#" onclick="showPage('page-policy'); return false;" class="hover:text-white">Policy</a> &gt;
+                </span>
+                <span class="text-white">Warranty Policy</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-8">Warranty Policy</h1>
+            <div class="policy-content max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                <p>To facilitate warranty inquiries for products purchased at S7V7N, we respectfully provide our customers with the following warranty policies and contact information.</p>
+
+                <h2>1. Product Warranty Contact</h2>
+                <p>When you need warranty service, please contact S7V7N through the following methods:</p>
+                <ul>
+                    <li>Call the warranty hotline: 1900 3677</li>
+                    <li>Send a direct message via our website or fanpage</li>
+                    <li>Bring the product directly to S7V7N branches or Warranty Centers</li>
+                    <li>Bring the product directly to the manufacturer’s/ supplier’s Warranty Center</li>
+                </ul>
+                <p><strong>Note:</strong></p>
+                <ul>
+                    <li>Customers may also send products for warranty through a shipping service. After receiving the product, S7V7N will provide feedback regarding warranty information.</li>
+                    <li>Please contact our support staff before sending products to receive assistance.</li>
+                </ul>
+
+                <h2>2. Warranty Conditions</h2>
+                <ul>
+                    <li>The product must still be within S7V7N’s warranty period; the warranty period is recorded based on purchase information and the product’s Serial Number.</li>
+                    <li>The product must retain the warranty seal or distributor’s seal. For products requiring warranty with the box, customers must send the full box and included accessories.</li>
+                    <li>The product must remain intact, without scratches, dents, or deformation beyond the manufacturer’s/distributor’s regulations.</li>
+                    <li>The product must have defects arising during use due to manufacturer issues such as components or technical faults.</li>
+                </ul>
+                <p><strong>Note:</strong></p>
+                <ul>
+                    <li>Specific warranty conditions may vary depending on the manufacturer and supplier.</li>
+                    <li>Data stored in products (Laptop/Desktop/Memory Card/Hard Drive…) is not covered under warranty. We are not responsible for any direct or indirect damages caused to customers if data stored in the product is disclosed, lost, or damaged during inspection or warranty processing.</li>
+                    <li>Customers should carefully review the warranty card and manufacturer’s warranty policy before using the product.</li>
+                </ul>
+
+                <h2>3. Products Not Eligible for Warranty</h2>
+                <ul>
+                    <li>Products whose S7V7N warranty period has expired.</li>
+                    <li>Products missing required devices or accessories (e.g., receiver, adapter…).</li>
+                    <li>Products without purchase information or not supplied by S7V7N.</li>
+                    <li>Products damaged due to user error (dropping, denting, deformation, water damage, or improper use).</li>
+                    <li>Products that have been repaired, disassembled, or structurally altered by unauthorized third parties.</li>
+                    <li>Product information (Serial Number/IMEI/Service Tag) is missing or does not match the actual product.</li>
+                    <li>Products damaged due to objective reasons such as natural disasters, fire, animals, insects, or environmental wear and tear.</li>
+                </ul>
+
+                <h2>4. General Warranty Policy</h2>
+                <p>All products sold by S7V7N are warranted according to the regulations of the manufacturer/distributor. All defective products will be sent to the manufacturer or an authorized service provider for warranty service. S7V7N is not responsible if the manufacturer or authorized service provider refuses warranty.</p>
+                
+                <h3>4.1 Replacement Policy</h3>
+                <p><strong>Product replacement within 7 days:</strong></p>
+                <p>For products with defects caused by the manufacturer or S7V7N, customers may request a replacement within 7 days from the purchase date. Applicable to Laptop and Monitor products (except for certain product lines with separate warranty policies).</p>
+                
+                <p><strong>Product replacement within 30 days:</strong></p>
+                <p>For products with defects caused by the manufacturer or S7V7N, customers may request a replacement within 30 days from the purchase date. Applicable to gaming gear (keyboard, mouse, headset…) and computer components (NUC, CPU, RAM, Hard Drive, cooling system, power supply, and other devices).</p>
+                
+                <p><strong>Requirements for replacement products:</strong></p>
+                <ul>
+                    <li>The product must be in the same condition as when purchased.</li>
+                    <li>The box must be like new, without dents, tears, writing, drawing, or tape/glue marks.</li>
+                    <li>All included accessories must be intact, undamaged, and scratch-free.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- === PAGE: DELIVERY POLICY (NEW) === -->
+        <div id="page-delivery" class="page">
+            <div class="mb-4">
+                <span class="text-gray-400">
+                    <a href="#" onclick="showPage('page-home'); return false;" class="hover:text-white">Home</a> &gt;
+                    <a href="#" onclick="showPage('page-policy'); return false;" class="hover:text-white">Policy</a> &gt;
+                </span>
+                <span class="text-white">Delivery Policy</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-8">Delivery Policy</h1>
+            <div class="policy-content max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                <p>S7V7N provides nationwide delivery service, shipping directly to the address provided by customers. The estimated delivery time depends on the warehouse and the customer’s delivery address. For most orders, S7V7N requires a few working hours to verify information and package the products. If all items are available in stock, S7V7N will promptly hand them over to the shipping partner.</p>
+                
+                <h3>Delivery Service Fee</h3>
+                <p>...</p> <!-- Placeholder as fee was not detailed -->
+
+                <h3>Notes:</h3>
+                <ul>
+                    <li>In some cases, if the goods are not available at the nearest warehouse, the delivery time may be longer than expected due to stock transfer.</li>
+                    <li>Working days are from Monday to Friday, excluding Saturdays, Sundays, public holidays, Tet holidays, compensatory days off, and do not include remote island districts.</li>
+                </ul>
+
+                <h2>IMPORTANT NOTES WHEN RECEIVING GOODS</h2>
+                <ul>
+                    <li>Before delivering the goods, S7V7N Technical Support (HTTK) staff or the courier from our delivery partner will contact you via your registered phone number about 3–5 minutes in advance to confirm delivery.</li>
+                    <li>For standard delivery orders: if you are unable to receive the package on the first attempt, the courier will try to contact you at least 2 more times (in 2 different delivery shifts) to arrange a suitable delivery time. Please keep your phone available to coordinate with the courier.</li>
+                    <li>Upon receiving the goods, please record a video of the unboxing process. If you refuse to accept the goods due to reasons originating from S7V7N (e.g., product not as described, product quality not guaranteed), your order will be returned to us and canceled in the S7V7N system.</li>
+                    <li>If the package shows external signs of damage such as tears, dents, wetness, punctures, or broken seals, please carefully check the product inside before accepting. You have the full right to refuse the delivery and notify us via hotline 1900.5301 for assistance.</li>
+                    <li>For any changes to products or order cancellations, please inform us as soon as possible via hotline 1900.5301, or chat directly on the S7V7N fanpage or website for support.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- === PAGE: PRIVACY POLICY (NEW) === -->
+        <div id="page-privacy" class="page">
+            <div class="mb-4">
+                <span class="text-gray-400">
+                    <a href="#" onclick="showPage('page-home'); return false;" class="hover:text-white">Home</a> &gt;
+                    <a href="#" onclick="showPage('page-policy'); return false;" class="hover:text-white">Policy</a> &gt;
+                </span>
+                <span class="text-white">Privacy Policy</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-8">Privacy Policy</h1>
+            <div class="policy-content max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                
+                <h2>1. Purpose and Scope of Information Collection</h2>
+                <p>S7V7N collects only necessary personal information to support service registration and order processing, including name, address, phone number, email, and product details. All information is used internally and not shared, sold, or exchanged with any third party.</p>
+
+                <h2>2. Use of Information</h2>
+                <p>Collected data is used to:</p>
+                <ul>
+                    <li>Support customers and provide service updates</li>
+                    <li>Process and deliver orders</li>
+                    <li>Send product or event information (if subscribed)</li>
+                </ul>
+                <p>S7V7N may provide information to legal authorities only when required by law.</p>
+
+                <h2>3. Information Retention</h2>
+                <p>Personal data is stored until customers request deletion via email: cskh@s7v7n.com.</p>
+
+                <h2>4. Access to Personal Data</h2>
+                <p>Access is limited to:</p>
+                <ul>
+                    <li>S7V7N Trading Company Limited</li>
+                    <li>Authorized partners providing contracted services under confidentiality agreements.</li>
+                </ul>
+
+                <h2>5. Company Information</h2>
+                <p>S7V7N Trading Company Limited<br>
+                82 Hoang Hoa Tham St., Ward 12, Tan Binh District, HCMC<br>
+                Hotline: 1800 6175<br>
+                Email: cskh@s7v7n.com<br>
+                Website: www.s7v7n.com</p>
+
+                <h2>6. Access and Correction</h2>
+                <p>Customers may contact cskh@s7v7n.com or 1800 6975 to view or update their personal data.</p>
+
+                <h2>7. Complaint Resolution</h2>
+                <p>S7V7N is committed to protecting your personal data and using it only for legitimate purposes. For questions or complaints regarding data misuse, please contact 1800 6975 or cskh@s7v7n.com</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- === FOOTER === -->
+    <footer class="bg-gray-900 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-lg font-semibold text-white">
+                    <a href="#" onclick="showPage('page-policy'); return false;" class="hover:text-indigo-400">POLICY</a>
+                </h3>
+                <ul class="space-y-1 mt-2">
+                    <li><a href="#" onclick="showPage('page-warranty'); return false;" class="text-gray-400 hover:text-white">Warranty Policy</a></li>
+                    <li><a href="#" onclick="showPage('page-delivery'); return false;" class="text-gray-400 hover:text-white">Delivery Policy</a></li>
+                    <li><a href="#" onclick="showPage('page-privacy'); return false;" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="text-gray-400">
+                <p>&copy; 2025 S7V7N. All rights reserved.</p>
+                <p>Custom Coded Edition</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- === TOAST NOTIFICATION === -->
+    <div id="toast">Item added to cart!</div>
+    
+    <!--
+      === FIREBASE SDK (V8 COMPAT) ===
+      This is the correct V8/compat SDK.
+      It MUST be loaded *before* app.js.
+    -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- NEW: Added Firebase transaction support -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+
+    <!--
+      === OUR APPLICATION LOGIC ===
+      This is our app.js, loaded as a regular script.
+      It will find the `firebase` object created by the scripts above.
+    -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

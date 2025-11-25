@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S7V7N - Product</title>
+    
+    <!-- 1. Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load Google Font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. Configure Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            '800': '#1f2937',
+                            '900': '#111827',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- 4. Link our external CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+
+    <!-- === HEADER / NAVIGATION === -->
+    <header class="bg-gray-900 sticky top-0 z-40 border-b border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+            <!-- Logo -->
+            <a href="index.html" class="text-3xl font-bold tracking-tight text-white">
+                S7V7N
+            </a>
+            
+            <!-- Main Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="category.html?category=All" class="text-gray-300 hover:text-white transition-colors">Products</a>
+                <a href="category.html?category=PC Case" class="text-gray-300 hover:text-white transition-colors">PC Cases</a>
+                <a href="category.html?category=Keyboard" class="text-gray-300 hover:text-white transition-colors">Keyboards</a>
+                <a href="category.html?category=Mice" class="text-gray-300 hover:text-white transition-colors">Mice</a>
+            </div>
+            
+            <!-- Right Icons -->
+            <div class="flex items-center space-x-4">
+                <a href="login.html" id="login-link" class="text-gray-300 hover:text-white transition-colors">Log In</a>
+                <a href="admin.html" id="admin-link" class="text-sm text-gray-400 hover:text-indigo-400 transition-colors" style="display: none;">Admin</a>
+                <button id="logout-button" onclick="handleLogout()" class="text-gray-300 hover:text-white transition-colors" style="display: none;">Log Out</button>
+                
+                <a href="compare.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span id="compare-count-badge" class="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+                
+                <a href="cart.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- === MAIN CONTENT WRAPPER === -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- === PAGE: PRODUCT DETAIL === -->
+        <div id="page-product">
+            <div class="mb-4" id="product-breadcrumb">
+                <!-- Breadcrumb will be set by JS -->
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Product Image -->
+                <div>
+                    <img id="product-image" src="https://placehold.co/600x600/1f2937/ffffff?text=Loading..." alt="Product Image" class="w-full rounded-lg shadow-lg aspect-square object-cover">
+                </div>
+                
+                <!-- Product Info -->
+                <div>
+                    <h1 id="product-name" class="text-4xl font-bold tracking-tight mb-2">Product Name</h1>
+                    <p id="product-price" class="text-3xl text-indigo-400 font-semibold mb-4">0 VND</p>
+                    
+                    <div id="product-stock-level" class="text-lg font-medium mb-6"></div>
+
+                    <p id="product-description" class="text-gray-300 mb-8 leading-relaxed">
+                        Product description goes here.
+                    </p>
+                
+                    <div id="product-specs-container" class="mb-8" style="display: none;">
+                        <h3 class="text-xl font-semibold text-white mb-4">Technical Specifications</h3>
+                        <ul id="product-specs-list" class="space-y-3 text-gray-300 bg-gray-800 p-4 rounded-lg"></ul>
+                    </div>
+                
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="flex items-center border border-gray-700 rounded-lg">
+                            <button onclick="updateQuantity('product-quantity-input', -1)" class="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-l-lg">-</button>
+                            <input id="product-quantity-input" type="number" value="1" min="1" class="w-16 text-center bg-gray-900 border-x border-gray-700 py-2 focus:outline-none">
+                            <button onclick="updateQuantity('product-quantity-input', 1)" class="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-r-lg">+</button>
+                        </div>
+                        <button id="add-to-cart-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed">
+                            Add to Cart
+                        </button>
+                    </div>
+
+                    <button id="add-to-compare-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        Add to Compare
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- === FOOTER === -->
+    <footer class="bg-gray-900 border-t border-gray-800 mt-20">
+        <!-- You can copy the footer content from index.html here -->
+    </footer>
+    
+    <!-- === TOAST NOTIFICATION === -->
+    <div id="toast"></div>
+    
+    <!-- Firebase and App Logic Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S7V7N - Delivery Policy</title>
+    
+    <!-- 1. Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Load Google Font (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. Configure Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            '800': '#1f2937',
+                            '900': '#111827',
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- 4. Link our external CSS file -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+
+    <!-- === HEADER / NAVIGATION === -->
+    <header class="bg-gray-900 sticky top-0 z-40 border-b border-gray-800">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+            <!-- Logo -->
+            <a href="index.html" class="text-3xl font-bold tracking-tight text-white">
+                S7V7N
+            </a>
+            
+            <!-- Main Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="category.html?category=All" class="text-gray-300 hover:text-white transition-colors">Products</a>
+                <a href="category.html?category=PC Case" class="text-gray-300 hover:text-white transition-colors">PC Cases</a>
+                <a href="category.html?category=Keyboard" class="text-gray-300 hover:text-white transition-colors">Keyboards</a>
+                <a href="category.html?category=Mice" class="text-gray-300 hover:text-white transition-colors">Mice</a>
+            </div>
+            
+            <!-- Right Icons -->
+            <div class="flex items-center space-x-4">
+                <a href="login.html" id="login-link" class="text-gray-300 hover:text-white transition-colors">Log In</a>
+                <a href="admin.html" id="admin-link" class="text-sm text-gray-400 hover:text-indigo-400 transition-colors" style="display: none;">Admin</a>
+                <button id="logout-button" onclick="handleLogout()" class="text-gray-300 hover:text-white transition-colors" style="display: none;">Log Out</button>
+                
+                <!-- Compare Button -->
+                <a href="compare.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span id="compare-count-badge" class="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+                
+                <!-- Cart Button -->
+                <a href="cart.html" class="relative text-gray-300 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- === MAIN CONTENT WRAPPER === -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- === PAGE: DELIVERY POLICY (NEW) === -->
+        <div id="page-delivery">
+            <div class="mb-4">
+                <span class="text-gray-400">
+                    <a href="index.html" class="hover:text-white">Home</a> &gt;
+                    <a href="policy.html" class="hover:text-white">Policy</a> &gt;
+                </span>
+                <span class="text-white">Delivery Policy</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-8">Delivery Policy</h1>
+            <div class="policy-content max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                <p>S7V7N provides nationwide delivery service, shipping directly to the address provided by customers. The estimated delivery time depends on the warehouse and the customer’s delivery address. For most orders, S7V7N requires a few working hours to verify information and package the products. If all items are available in stock, S7V7N will promptly hand them over to the shipping partner.</p>
+                
+                <h3>Delivery Service Fee</h3>
+                <p>...</p> <!-- Placeholder as fee was not detailed -->
+
+                <h3>Notes:</h3>
+                <ul>
+                    <li>In some cases, if the goods are not available at the nearest warehouse, the delivery time may be longer than expected due to stock transfer.</li>
+                    <li>Working days are from Monday to Friday, excluding Saturdays, Sundays, public holidays, Tet holidays, compensatory days off, and do not include remote island districts.</li>
+                </ul>
+
+                <h2>IMPORTANT NOTES WHEN RECEIVING GOODS</h2>
+                <ul>
+                    <li>Before delivering the goods, S7V7N Technical Support (HTTK) staff or the courier from our delivery partner will contact you via your registered phone number about 3–5 minutes in advance to confirm delivery.</li>
+                    <li>For standard delivery orders: if you are unable to receive the package on the first attempt, the courier will try to contact you at least 2 more times (in 2 different delivery shifts) to arrange a suitable delivery time. Please keep your phone available to coordinate with the courier.</li>
+                    <li>Upon receiving the goods, please record a video of the unboxing process. If you refuse to accept the goods due to reasons originating from S7V7N (e.g., product not as described, product quality not guaranteed), your order will be returned to us and canceled in the S7V7N system.</li>
+                    <li>If the package shows external signs of damage such as tears, dents, wetness, punctures, or broken seals, please carefully check the product inside before accepting. You have the full right to refuse the delivery and notify us via hotline 1900.5301 for assistance.</li>
+                    <li>For any changes to products or order cancellations, please inform us as soon as possible via hotline 1900.5301, or chat directly on the S7V7N fanpage or website for support.</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- === FOOTER === -->
+    <footer class="bg-gray-900 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-lg font-semibold text-white">
+                    <a href="policy.html" class="hover:text-indigo-400">POLICY</a>
+                </h3>
+                <ul class="space-y-1 mt-2">
+                    <li><a href="warranty.html" class="text-gray-400 hover:text-white">Warranty Policy</a></li>
+                    <li><a href="delivery.html" class="text-gray-400 hover:text-white">Delivery Policy</a></li>
+                    <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="text-gray-400">
+                <p>&copy; 2025 S7V7N. All rights reserved.</p>
+                <p>Custom Coded Edition</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- === TOAST NOTIFICATION === -->
+    <div id="toast">Item added to cart!</div>
+    
+    <!--
+      === FIREBASE SDK (V8 COMPAT) ===
+      This is the correct V8/compat SDK.
+      It MUST be loaded *before* app.js.
+    -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- NEW: Added Firebase transaction support -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+
+    <!--
+      === OUR APPLICATION LOGIC ===
+      This is our app.js, loaded as a regular script.
+      It will find the `firebase` object created by the scripts above.
+    -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

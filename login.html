@@ -80,7 +80,7 @@
     <!-- === MAIN CONTENT WRAPPER === -->
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-        <!-- === PAGE: LOGIN === -->
+       <!-- === PAGE: LOGIN === -->
         <div id="page-login" class="page">
             <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
                 <h1 class="text-3xl font-bold tracking-tight text-center mb-6">Log In</h1>
@@ -112,12 +112,12 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <div class="mb-6 md:mb-0">
                 <h3 class="text-lg font-semibold text-white">
-                    <a href="policy.html" class="hover:text-indigo-400">POLICY</a>
+                    <a href="#" onclick="showPage('page-policy'); return false;" class="hover:text-indigo-400">POLICY</a>
                 </h3>
                 <ul class="space-y-1 mt-2">
-                    <li><a href="warranty.html" class="text-gray-400 hover:text-white">Warranty Policy</a></li>
-                    <li><a href="delivery.html" class="text-gray-400 hover:text-white">Delivery Policy</a></li>
-                    <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    <li><a href="#" onclick="showPage('page-warranty'); return false;" class="text-gray-400 hover:text-white">Warranty Policy</a></li>
+                    <li><a href="#" onclick="showPage('page-delivery'); return false;" class="text-gray-400 hover:text-white">Delivery Policy</a></li>
+                    <li><a href="#" onclick="showPage('page-privacy'); return false;" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
                 </ul>
             </div>
             <div class="text-gray-400">
@@ -136,6 +136,7 @@
       It MUST be loaded *before* app.js.
     -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <!-- NEW: Added Firebase transaction support -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>

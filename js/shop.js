@@ -31,6 +31,11 @@ export function createProductCard(product) {
     `;
 }
 
+// Helper to save cart to localStorage
+function saveCart() {
+    localStorage.setItem('s7v7n_cart', JSON.stringify(state.cart));
+}
+
 // === CART LOGIC ===
 export function addToCart(productId, quantity = 1) {
     const product = state.allProducts.find(p => p.id === productId);
@@ -46,6 +51,7 @@ export function addToCart(productId, quantity = 1) {
     }
     
     showToast(`${product.name} added to cart!`);
+    saveCart();
     renderCart();
 }
 
@@ -99,9 +105,10 @@ export function renderCart() {
 
 export function updateQuantity(inputId, change) {
     const id = inputId.split('cart-qty-')[1];
-    const item = state.cart.find(i => i.id === id);
-    if (item) {
-        item.quantity = Math.max(1, item.quantity + change);
+    const cartItem = state.cart.find(i => i.id === id);
+    if (cartItem) {
+        cartItem.quantity = Math.max(1, cartItem.quantity + change);
+        saveCart();
         renderCart();
     } else if (inputId === 'product-quantity-input') {
         const input = document.getElementById(inputId);
@@ -111,6 +118,7 @@ export function updateQuantity(inputId, change) {
 
 export function removeFromCart(id) {
     state.cart = state.cart.filter(i => i.id !== id);
+    saveCart();
     renderCart();
 }
 
@@ -134,6 +142,7 @@ export async function handleCheckout() {
         
         showToast("Order placed! Thank you for your purchase.");
         state.cart = [];
+        saveCart();
         await loadProductsFromFirebase(); // Reload data
         renderCart();
         window.location.href = 'index.html'; // Redirect to home page after checkout

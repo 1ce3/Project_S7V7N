@@ -1,0 +1,133 @@
+/* This file contains all the custom styles from the <style> tag */
+body {
+    font-family: 'Inter', sans-serif;
+    background: #111827;
+    background: linear-gradient(40deg,rgba(17, 24, 39, 1) 65%, rgba(12, 17, 92, 1) 80%, rgba(7, 54, 140, 1) 100%);
+    color: #f9fafb; /* dark:text-gray-100 */
+}
+/* Hide all "pages" by default */
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Utility class to show the active page */
+.page-active {
+    display: block;
+}
+/* Simple toast notification */
+#toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: #22c55e; /* green-500 */
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 50;
+    pointer-events: none; /* Make it non-clickable */
+}
+.toast-show {
+    opacity: 1;
+}
+/* Styles for policy pages */
+.policy-content h2 {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    margin-top: 2rem; /* mt-8 */
+    margin-bottom: 1rem; /* mb-4 */
+    border-bottom: 1px solid #374151; /* border-b border-gray-700 */
+    padding-bottom: 0.5rem; /* pb-2 */
+}
+.policy-content h3 {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 600; /* font-semibold */
+    margin-top: 1.5rem; /* mt-6 */
+    margin-bottom: 0.5rem; /* mb-2 */
+}
+.policy-content p, .policy-content li {
+    font-size: 1rem; /* text-base */
+    line-height: 1.75; /* leading-relaxed */
+    color: #d1d5db; /* text-gray-300 */
+    margin-bottom: 1rem; /* mb-4 */
+}
+.policy-content ul {
+    list-style-type: disc;
+    margin-left: 1.5rem; /* ml-6 */
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+#google_translate_element {
+    display: none !important;
+}
+
+/* Google Translate Widget Styles */
+.goog-te-gadget-simple {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value,
+.goog-te-gadget-simple .goog-te-menu-value span,
+.goog-te-gadget-simple .goog-te-menu-value span a {
+    color: #f9fafb !important;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.goog-te-gadget-simple:hover .goog-te-menu-value span {
+    color: #d1d5db !important;
+}
+
+.goog-te-gadget-icon, .goog-logo-link {
+    display: none !important;
+}
+
+body .goog-te-menu-frame {
+    background-color: #1f2937 !important;
+    border: 1px solid #374151 !important;
+    box-shadow: none !important;
+}
+
+body .goog-te-menu-frame .goog-te-menu2-item-selected .text,
+body .goog-te-menu-frame .goog-te-menu2-item:hover .text {
+    color: #f9fafb !important;
+    background-color: #374151 !important;
+}
+
+body .goog-te-menu-frame .goog-te-menu2-item .text {
+    color: #d1d5db !important;
+}
+
+.goog-tooltip, .goog-tooltip:hover, .goog-text-highlight {
+    display: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Product Card Animation */
+.bg-gray-800.rounded-lg.shadow-lg.overflow-hidden {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.bg-gray-800.rounded-lg.shadow-lg.overflow-hidden:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(99, 102, 241, 0.5);
+}
+
+/* Button Animation */
+button {
+    transition: transform 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
